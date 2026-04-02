@@ -1,14 +1,16 @@
 import express from "express";
 import cors from "cors";
 import pool from "./config/db.js";
+import errorHandler from "./middlewares/errorHandler.js";
+import logger from "./middlewares/logger.js";
 
 // import routes
 import taskRouter from "./routes/task.route.js";
-import errorHandler from "./middlewares/errorHandler.js";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(logger);
 
 // test route
 app.get("/", async (req, res) => {
