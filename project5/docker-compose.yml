@@ -1,0 +1,28 @@
+services:
+  app:
+    build: .
+    container_name: task-app
+    ports:
+      - "5001:5001"
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    command: npm run dev
+
+  postgres:
+    image: postgres:18.3
+    container_name: pg-local1
+    environment:
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: devdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql
+
+volumes:
+  pgdata:
