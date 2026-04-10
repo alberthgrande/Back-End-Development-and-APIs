@@ -11,3 +11,16 @@ export const assignPermission = async (req, res) => {
 
   res.json({ message: "Permission assigned" });
 };
+
+export const updatePermission = async (req, res) => {
+  const result = await permissionService.updatePermission(
+    req.params.id,
+    req.body.name,
+  );
+  res.json(result);
+};
+
+export const deletePermission = async (req, res) => {
+  await permissionService.deletePermission(req.params.id);
+  res.json({ message: "Deleted" });
+};
