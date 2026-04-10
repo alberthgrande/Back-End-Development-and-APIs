@@ -46,3 +46,76 @@ postgresql://psqluser:psqlpassword@localhost:5432/rbac_db
   (both usually work, depending on the tool)
 
 ---
+
+# DATABASE DESIGN TABLES
+
+- users
+
+```
+CREATE TABLE users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR(100),
+  email VARCHAR(100) UNIQUE NOT NULL,
+  password TEXT NOT NULL,
+  role_id UUID REFERENCES roles(id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+- roles
+
+```
+CREATE TABLE roles (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR(50) UNIQUE NOT NULL
+);
+```
+
+- permissions (optional but PRO LEVEL)
+
+```
+CREATE TABLE permissions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR(100) UNIQUE NOT NULL
+);
+```
+
+- role_permissions
+
+```
+CREATE TABLE role_permissions (
+  role_id UUID REFERENCES roles(id),
+  permission_id UUID REFERENCES permissions(id),
+  PRIMARY KEY (role_id, permission_id)
+);
+```
+
+- refresh_tokens
+
+```
+CREATE TABLE refresh_tokens (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES users(id),
+  token TEXT NOT NULL,
+  expires_at TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+# create POST /permissions
+
+{
+"name": "read"
+}
+
+# assign POST /permissions/assign
+
+{
+"role_id": "admin-role-uuid",
+"permission_id": "read-permission-uuid"
+}
+
+# authorize API
+
+GET /admin
+Authorization: Bearer <token>
