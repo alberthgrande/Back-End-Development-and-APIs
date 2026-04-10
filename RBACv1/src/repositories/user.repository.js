@@ -35,3 +35,19 @@ export const findAll = async () => {
 
   return rows;
 };
+
+export const updateUser = async (id, data) => {
+  const { rows } = await pool.query(
+    `UPDATE users
+     SET name = $1, email = $2, role_id = $3
+     WHERE id = $4
+     RETURNING *`,
+    [data.name, data.email, data.role_id, id],
+  );
+
+  return rows[0];
+};
+
+export const deleteUser = async (id) => {
+  await pool.query(`DELETE FROM users WHERE id = $1`, [id]);
+};

@@ -29,3 +29,19 @@ export const getPermissionsByUserId = async (user_id) => {
 
   return rows.map((r) => r.name);
 };
+
+export const updatePermission = async (id, name) => {
+  const { rows } = await pool.query(
+    `UPDATE permissions SET name = $1 WHERE id = $2 RETURNING *`,
+    [name, id],
+  );
+
+  return rows[0];
+};
+
+export const deletePermission = async (id) => {
+  await pool.query(`DELETE FROM role_permissions WHERE permission_id = $1`, [
+    id,
+  ]);
+  await pool.query(`DELETE FROM permissions WHERE id = $1`, [id]);
+};
