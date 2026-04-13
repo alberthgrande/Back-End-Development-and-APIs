@@ -1,11 +1,11 @@
 import { pool } from "../config/db.js";
 
-export const getProductsRepository = async () => {
+export const getProducts = async () => {
   const products = await pool.query(`SELECT * FROM products`);
   return products.rows;
 };
 
-export const createProductRepository = async (product) => {
+export const createProduct = async (product) => {
   const { name, price, stock } = product;
 
   try {
@@ -25,7 +25,7 @@ export const createProductRepository = async (product) => {
   }
 };
 
-export const getProductsByIdRepository = async (id) => {
+export const getProductById = async (id) => {
   const product = await pool.query(
     `
     SELECT * FROM products WHERE id = $1
@@ -36,7 +36,7 @@ export const getProductsByIdRepository = async (id) => {
   return product.rows[0];
 };
 
-export const updateProductsRepository = async (id, products) => {
+export const updateProduct = async (id, products) => {
   const { name, price, stock } = products;
 
   const result = await pool.query(
@@ -52,7 +52,7 @@ export const updateProductsRepository = async (id, products) => {
   return result.rows[0];
 };
 
-export const deleteProductsRepository = async (id) => {
+export const deleteProduct = async (id) => {
   const product = await pool.query(
     `
     DELETE FROM products WHERE id = $1 RETURNING *

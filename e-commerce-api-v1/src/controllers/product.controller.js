@@ -1,9 +1,9 @@
 import * as productService from "../services/product.service.js";
 
 // Get all products
-export const getProductsController = async (req, res) => {
+export const getProducts = async (req, res) => {
   try {
-    const products = await productService.getProductsService();
+    const products = await productService.getProducts();
     res.status(200).json({
       success: true,
       data: products,
@@ -19,9 +19,9 @@ export const getProductsController = async (req, res) => {
 };
 
 // Create a product
-export const createProductController = async (req, res) => {
+export const createProduct = async (req, res) => {
   try {
-    const product = await productService.createProductService(req.body);
+    const product = await productService.createProduct(req.body);
     res.status(201).json({
       success: true,
       message: "Product created successfully",
@@ -37,9 +37,9 @@ export const createProductController = async (req, res) => {
 };
 
 // Get product by ID
-export const getProductsByIdController = async (req, res) => {
+export const getProductById = async (req, res) => {
   try {
-    const product = await productService.getProductsByIdService(req.params.id);
+    const product = await productService.getProductById(req.params.id);
     res.status(200).json({
       success: true,
       data: product,
@@ -55,12 +55,9 @@ export const getProductsByIdController = async (req, res) => {
 };
 
 // update product
-export const updateProductsController = async (req, res) => {
+export const updateProduct = async (req, res) => {
   try {
-    const product = await productService.updateProductsService(
-      req.params.id,
-      req.body,
-    );
+    const product = await productService.updateProduct(req.params.id, req.body);
 
     res.status(200).json({
       success: true,
@@ -77,7 +74,7 @@ export const updateProductsController = async (req, res) => {
 };
 
 // Delete product
-export const deleteProductsController = async (req, res) => {
+export const deleteProduct = async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
 
@@ -88,7 +85,7 @@ export const deleteProductsController = async (req, res) => {
       });
     }
 
-    const product = await productService.deleteProductsService(id);
+    const product = await productService.deleteProduct(id);
 
     res.status(200).json({
       success: true,

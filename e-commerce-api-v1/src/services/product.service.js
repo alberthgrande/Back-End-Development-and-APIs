@@ -1,24 +1,24 @@
 import * as productRepository from "../repositories/product.repository.js";
 
 // Get all products
-export const getProductsService = async () => {
-  return await productRepository.getProductsRepository();
+export const getProducts = async () => {
+  return await productRepository.getProducts();
 };
 
 // Create a new product
-export const createProductService = async (product) => {
+export const createProduct = async (product) => {
   if (product.price < 0 || product.stock < 0) {
     const error = new Error("Price and stock must be non-negative");
     error.status = 400;
     throw error;
   }
 
-  return await productRepository.createProductRepository(product);
+  return await productRepository.createProduct(product);
 };
 
 // Get product by ID, with existence check
-export const getProductsByIdService = async (id) => {
-  const product = await productRepository.getProductsByIdRepository(id);
+export const getProductById = async (id) => {
+  const product = await productRepository.getProductById(id);
 
   if (!product) {
     const error = new Error(`Product with id ${id} not found`);
@@ -30,7 +30,7 @@ export const getProductsByIdService = async (id) => {
 };
 
 // Update product, with existence check
-export const updateProductsService = async (id, products) => {
+export const updateProduct = async (id, products) => {
   const { name, price, stock } = products;
 
   if (!name || price == null || stock == null) {
@@ -58,10 +58,7 @@ export const updateProductsService = async (id, products) => {
     throw error;
   }
 
-  const product = await productRepository.updateProductsRepository(
-    id,
-    products,
-  );
+  const product = await productRepository.updateProduct(id, products);
 
   if (!product) {
     const error = new Error(`Product with id ${id} not found`);
@@ -73,8 +70,8 @@ export const updateProductsService = async (id, products) => {
 };
 
 // Delete product
-export const deleteProductsService = async (id) => {
-  const product = await productRepository.deleteProductsRepository(id);
+export const deleteProduct = async (id) => {
+  const product = await productRepository.deleteProduct(id);
 
   if (!product) {
     const error = new Error(`Product with id ${id} not found`);
