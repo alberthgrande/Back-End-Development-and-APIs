@@ -35,3 +35,30 @@ export const getProductsByIdRepository = async (id) => {
 
   return product.rows[0];
 };
+
+export const updateProductsRepository = async (id, products) => {
+  const { name, price, stock } = products;
+
+  const result = await pool.query(
+    `
+    UPDATE products 
+    SET name=$1, price=$2, stock=$3 
+    WHERE id=$4
+    RETURNING *
+    `,
+    [name, price, stock, id],
+  );
+
+  return result.rows[0];
+};
+
+export const deleteProductsRepository = async (id) => {
+  const product = await pool.query(
+    `
+    DELETE FROM products WHERE id = $1 RETURNING *
+    `,
+    [id],
+  );
+
+  return product.rows[0];
+};

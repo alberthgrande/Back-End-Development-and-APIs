@@ -28,3 +28,59 @@ export const getProductsByIdService = async (id) => {
 
   return product;
 };
+
+// Update product, with existence check
+export const updateProductsService = async (id, products) => {
+  const { name, price, stock } = products;
+
+  if (!name || price == null || stock == null) {
+    const error = new Error("Missing required fields: name, price, stock");
+    error.status = 400;
+    throw error;
+  }
+
+  // Optional: stricter validation
+  if (typeof name !== "string") {
+    const error = new Error("Name must be a string");
+    error.status = 400;
+    throw error;
+  }
+
+  if (typeof price !== "number" || price < 0) {
+    const error = new Error("Price must be a non-negative number");
+    error.status = 400;
+    throw error;
+  }
+
+  if (!Number.isInteger(stock) || stock < 0) {
+    const error = new Error("Stock must be a non-negative integer");
+    error.status = 400;
+    throw error;
+  }
+
+  const product = await productRepository.updateProductsRepository(
+    id,
+    products,
+  );
+
+  if (!product) {
+    const error = new Error(`Product with id ${id} not found`);
+    error.status = 404;
+    throw error;
+  }
+
+  return product;
+};
+
+// Delete product
+export const deleteProductsService = async (id) => {
+  const product = await productRepository.deleteProductsRepository(id);
+
+  if (!product) {
+    const error = new Error(`Product with id ${id} not found`);
+    error.status = 404;
+    throw error;
+  }
+
+  return product;
+};
